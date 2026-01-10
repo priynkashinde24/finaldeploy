@@ -9,6 +9,8 @@ import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/lib/utils';
 
+type BackendRole = 'admin' | 'supplier' | 'reseller' | 'vendor' | 'customer' | 'delivery' | 'affiliate';
+
 export default function SignupPage() {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState<'vendor' | 'reseller' | 'customer' | 'delivery' | 'admin' | 'affiliate'>('reseller');
@@ -22,7 +24,7 @@ export default function SignupPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const roles = [
+  const roles: Array<{ id: string; label: string; backendRole: BackendRole }> = [
     { id: 'vendor', label: 'Vendor', backendRole: 'supplier' },
     { id: 'reseller', label: 'Reseller', backendRole: 'reseller' },
     { id: 'customer', label: 'Customer', backendRole: 'reseller' },
@@ -49,7 +51,7 @@ export default function SignupPage() {
 
     try {
       const selectedRoleData = roles.find(r => r.id === selectedRole);
-      const backendRole = selectedRoleData?.backendRole || 'reseller';
+      const backendRole: BackendRole = selectedRoleData?.backendRole || 'reseller';
 
       // Only reseller can self-register
       // Admin and supplier accounts must be created by an admin
