@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { cryptoPaymentAPI } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -35,7 +35,7 @@ const CRYPTO_NAMES: Record<Cryptocurrency, string> = {
   MATIC: 'Polygon',
 };
 
-export default function CryptoPaymentPage() {
+function CryptoPaymentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
@@ -368,6 +368,21 @@ export default function CryptoPaymentPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CryptoPaymentPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-text-secondary">Loading payment...</p>
+        </div>
+      </div>
+    }>
+      <CryptoPaymentContent />
+    </Suspense>
   );
 }
 
