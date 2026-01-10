@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "buildCommand": "bash -c 'cd api && npm ci && npm run build'",
+  "installCommand": "bash -c 'cd api && npm ci'",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/api/index.ts"
+    },
+    {
+      "source": "/health",
+      "destination": "/api/api/index.ts"
+    },
+    {
+      "source": "/ready",
+      "destination": "/api/api/index.ts"
+    },
+    {
+      "source": "/",
+      "destination": "/api/api/index.ts"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "api/api/index.ts": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  }
+}

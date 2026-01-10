@@ -1,0 +1,21 @@
+{
+  "name": "Revocart",
+  "short_name": "Revocart",
+  "description": "Launch Your Ecommerce Store in Minutes",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#AA0000",
+  "background_color": "#F5F5F5",
+  "display": "standalone"
+}
+

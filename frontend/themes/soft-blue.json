@@ -1,0 +1,31 @@
+{
+  "id": "soft-blue",
+  "name": "Soft Blue",
+  "description": "Calming blue tones for a peaceful feel",
+  "colors": {
+    "primary": "#6996D3",
+    "secondary": "#40E0D0",
+    "accent": "#AA0000",
+    "background": "#F0F7FF",
+    "surface": "#E6F2FF",
+    "text": "#1E3A5F",
+    "textSecondary": "#4A6FA5",
+    "border": "#B3D9FF"
+  },
+  "typography": {
+    "headingFont": "system-ui, -apple-system, sans-serif",
+    "bodyFont": "system-ui, -apple-system, sans-serif",
+    "headingWeight": "700",
+    "bodyWeight": "400"
+  },
+  "borderRadius": {
+    "sm": "0.5rem",
+    "md": "0.75rem",
+    "lg": "1rem",
+    "xl": "1.5rem"
+  },
+  "spacing": {
+    "scale": 1
+  }
+}
+

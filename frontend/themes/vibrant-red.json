@@ -1,0 +1,31 @@
+{
+  "id": "vibrant-red",
+  "name": "Vibrant Red",
+  "description": "Bold and energetic red theme",
+  "colors": {
+    "primary": "#AA0000",
+    "secondary": "#D4AF37",
+    "accent": "#FF4444",
+    "background": "#FFFFFF",
+    "surface": "#FFF5F5",
+    "text": "#1F2937",
+    "textSecondary": "#6B7280",
+    "border": "#FFB3B3"
+  },
+  "typography": {
+    "headingFont": "system-ui, -apple-system, sans-serif",
+    "bodyFont": "system-ui, -apple-system, sans-serif",
+    "headingWeight": "800",
+    "bodyWeight": "500"
+  },
+  "borderRadius": {
+    "sm": "0.25rem",
+    "md": "0.5rem",
+    "lg": "1rem",
+    "xl": "1.5rem"
+  },
+  "spacing": {
+    "scale": 1.2
+  }
+}
+

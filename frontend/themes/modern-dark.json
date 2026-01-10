@@ -1,0 +1,31 @@
+{
+  "id": "modern-dark",
+  "name": "Modern Dark",
+  "description": "Sleek dark theme with modern aesthetics",
+  "colors": {
+    "primary": "#AA0000",
+    "secondary": "#6996D3",
+    "accent": "#40E0D0",
+    "background": "#0F172A",
+    "surface": "#1E293B",
+    "text": "#F1F5F9",
+    "textSecondary": "#CBD5E1",
+    "border": "#334155"
+  },
+  "typography": {
+    "headingFont": "system-ui, -apple-system, sans-serif",
+    "bodyFont": "system-ui, -apple-system, sans-serif",
+    "headingWeight": "700",
+    "bodyWeight": "400"
+  },
+  "borderRadius": {
+    "sm": "0.375rem",
+    "md": "0.5rem",
+    "lg": "1rem",
+    "xl": "1.5rem"
+  },
+  "spacing": {
+    "scale": 1
+  }
+}
+

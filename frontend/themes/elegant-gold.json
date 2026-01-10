@@ -1,0 +1,31 @@
+{
+  "id": "elegant-gold",
+  "name": "Elegant Gold",
+  "description": "Luxurious theme with gold accents",
+  "colors": {
+    "primary": "#D4AF37",
+    "secondary": "#AA0000",
+    "accent": "#F5E6D3",
+    "background": "#FFFFFF",
+    "surface": "#FFFBF0",
+    "text": "#1F2937",
+    "textSecondary": "#6B7280",
+    "border": "#E5D4A0"
+  },
+  "typography": {
+    "headingFont": "Georgia, serif",
+    "bodyFont": "Georgia, serif",
+    "headingWeight": "700",
+    "bodyWeight": "400"
+  },
+  "borderRadius": {
+    "sm": "0.25rem",
+    "md": "0.5rem",
+    "lg": "0.75rem",
+    "xl": "1rem"
+  },
+  "spacing": {
+    "scale": 1.1
+  }
+}
+

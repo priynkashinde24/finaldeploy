@@ -1,0 +1,235 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Sir ShopAlot Theme Colors - Updated from Color Palette */
+    
+    /* Backgrounds */
+    --color-background: #0B0B0B;
+    --color-surface: #121212;
+    --color-surface-light: #1A1A1A;
+    --color-border: #242424;
+    
+    /* Primary Colors */
+    --color-primary-deep-red: #AA0000; /* Energy, excitement, and attention */
+    --color-primary-red-hover: #C80000;
+    --color-primary-muted-gold: #D4AF37; /* Regal and sophisticated touch */
+    
+    /* Secondary Colors */
+    --color-secondary-off-white: #F5F5F5; /* Softens bold colors for readability */
+    --color-secondary-gray: #E0E0E0; /* Neutral balance for backgrounds */
+    --color-secondary-soft-blue: #6996D3; /* Trustworthy and subtle accents */
+    
+    /* Accent Colors */
+    --color-accent-turquoise: #40E0D0; /* Fresh and prosperous vibe, ideal for callouts */
+    
+    /* Legacy support */
+    --color-primary-red: #AA0000;
+    --color-gold: #D4AF37;
+    --color-gold-soft: #F0D77A;
+    
+    /* Text */
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #F5F5F5;
+    --color-text-muted: #A1A1A1;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-white;
+    font-family: 'Inter', 'Poppins', system-ui, sans-serif;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #FFFFFF !important;
+  }
+  
+  html {
+    @apply bg-background text-white;
+    scroll-behavior: smooth;
+    color: #FFFFFF;
+  }
+  
+  /* Force all text to white by default */
+  * {
+    color: inherit;
+  }
+  
+  /* Override any gray text colors */
+  .text-gray-400,
+  .text-gray-500,
+  .text-gray-600,
+  .text-gray-700,
+  .text-slate-400,
+  .text-slate-500,
+  .text-zinc-400,
+  .text-zinc-500,
+  .text-muted {
+    @apply text-white;
+  }
+}
+
+@layer components {
+  /* Glassmorphism utility */
+  .glass {
+    @apply bg-surface/80 backdrop-blur-xl border border-neutral-700/50;
+  }
+
+  .glass-strong {
+    @apply bg-surface2/90 backdrop-blur-2xl border border-neutral-700/70;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-gold to-accent bg-clip-text text-transparent;
+  }
+
+  /* Gradient backgrounds */
+  .gradient-primary {
+    @apply bg-gradient-to-r from-primary to-gold;
+  }
+
+  .gradient-accent {
+    @apply bg-gradient-to-r from-secondary-soft-blue to-accent;
+  }
+
+  /* Glow effects - Updated with new color palette */
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(170, 0, 0, 0.5), 0 0 40px rgba(170, 0, 0, 0.3);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2);
+  }
+  
+  .glow-turquoise {
+    box-shadow: 0 0 20px rgba(64, 224, 208, 0.4), 0 0 40px rgba(64, 224, 208, 0.2);
+  }
+  
+  .shadow-glowRed {
+    box-shadow: 0 0 20px rgba(170, 0, 0, 0.5);
+  }
+
+  /* Modern card */
+  .card-modern {
+    @apply glass rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300;
+  }
+
+  /* Animated border */
+  .border-animated {
+    position: relative;
+    background: linear-gradient(90deg, transparent, transparent);
+  }
+
+  .border-animated::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(90deg, var(--color-primary-deep-red), var(--color-primary-muted-gold), var(--color-accent-turquoise));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-rotate 3s linear infinite;
+  }
+
+  @keyframes border-rotate {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Container spacing */
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Scroll reveal */
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 3D transform */
+  .transform-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  /* Hover lift */
+  .hover-lift {
+    @apply transition-transform duration-300;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-8px);
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Selection styles */
+::selection {
+  @apply bg-primary/30 text-white;
+}
+
+::-moz-selection {
+  @apply bg-primary/30 text-white;
+}

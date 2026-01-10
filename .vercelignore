@@ -1,0 +1,14 @@
+# Ignore files that shouldn't be deployed to Vercel
+node_modules/
+.git/
+.env
+.env.local
+*.log
+.DS_Store
+coverage/
+*.md
+!README.md
+
+# Note: Frontend and backend should be deployed as separate Vercel projects
+# Backend project: Root directory = /api
+# Frontend project: Root directory = /frontend

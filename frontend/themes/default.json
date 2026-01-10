@@ -1,0 +1,31 @@
+{
+  "id": "default",
+  "name": "Default",
+  "description": "Clean and professional default theme",
+  "colors": {
+    "primary": "#AA0000",
+    "secondary": "#6996D3",
+    "accent": "#40E0D0",
+    "background": "#FFFFFF",
+    "surface": "#F5F5F5",
+    "text": "#111827",
+    "textSecondary": "#6B7280",
+    "border": "#E0E0E0"
+  },
+  "typography": {
+    "headingFont": "system-ui, -apple-system, sans-serif",
+    "bodyFont": "system-ui, -apple-system, sans-serif",
+    "headingWeight": "700",
+    "bodyWeight": "400"
+  },
+  "borderRadius": {
+    "sm": "0.25rem",
+    "md": "0.5rem",
+    "lg": "0.75rem",
+    "xl": "1rem"
+  },
+  "spacing": {
+    "scale": 1
+  }
+}
+

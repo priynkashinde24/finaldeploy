@@ -1,0 +1,31 @@
+{
+  "id": "turquoise-accent",
+  "name": "Turquoise Accent",
+  "description": "Fresh turquoise with modern vibes",
+  "colors": {
+    "primary": "#40E0D0",
+    "secondary": "#6996D3",
+    "accent": "#AA0000",
+    "background": "#FFFFFF",
+    "surface": "#F0FDFC",
+    "text": "#0F172A",
+    "textSecondary": "#475569",
+    "border": "#99F6E4"
+  },
+  "typography": {
+    "headingFont": "system-ui, -apple-system, sans-serif",
+    "bodyFont": "system-ui, -apple-system, sans-serif",
+    "headingWeight": "700",
+    "bodyWeight": "400"
+  },
+  "borderRadius": {
+    "sm": "0.5rem",
+    "md": "1rem",
+    "lg": "1.5rem",
+    "xl": "2rem"
+  },
+  "spacing": {
+    "scale": 1
+  }
+}
+

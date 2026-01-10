@@ -1,0 +1,31 @@
+{
+  "id": "minimal-white",
+  "name": "Minimal White",
+  "description": "Ultra-clean minimal design",
+  "colors": {
+    "primary": "#000000",
+    "secondary": "#6B7280",
+    "accent": "#F5F5F5",
+    "background": "#FFFFFF",
+    "surface": "#FAFAFA",
+    "text": "#111827",
+    "textSecondary": "#6B7280",
+    "border": "#E5E7EB"
+  },
+  "typography": {
+    "headingFont": "system-ui, -apple-system, sans-serif",
+    "bodyFont": "system-ui, -apple-system, sans-serif",
+    "headingWeight": "600",
+    "bodyWeight": "400"
+  },
+  "borderRadius": {
+    "sm": "0",
+    "md": "0",
+    "lg": "0",
+    "xl": "0"
+  },
+  "spacing": {
+    "scale": 0.9
+  }
+}
+
