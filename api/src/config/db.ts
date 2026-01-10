@@ -76,6 +76,7 @@ export const connectDB = async (): Promise<void> => {
     console.log('   URI:', connectionString.replace(/:[^:@]+@/, ':****@'));
     console.log('   Host:', hostFromUri);
     console.log('   Database:', dbNameFromUri);
+    console.log('   Timestamp:', new Date().toISOString());
     
     await mongoose.connect(connectionString, {
       serverSelectionTimeoutMS: 10000, // 10 seconds timeout (matches error message)
@@ -96,6 +97,8 @@ export const connectDB = async (): Promise<void> => {
     console.log(`   Host: ${actualHost}`);
     console.log(`   Database: ${actualDbName}`);
     console.log(`   Ready State: ${connection.readyState} (1=connected)`);
+    console.log(`   Timestamp: ${new Date().toISOString()}`);
+    console.log(`   Database connected successfully`);
   } catch (error: any) {
     console.error('\n❌ Error connecting to MongoDB:');
     const errorCode = error?.code || error?.cause?.code || 'UNKNOWN';
