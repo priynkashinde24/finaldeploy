@@ -236,16 +236,80 @@ app.get('/health', (req, res) => {
 // Readiness probe (DB connectivity)
 app.get('/ready', async (req, res) => {
   try {
+    console.log('[READY] Checking database connection...');
+    console.log('[READY] MONGODB_URI set:', !!process.env.MONGODB_URI);
+    
     const mongoose = (await import('mongoose')).default;
-    const state = mongoose.connection.readyState;
-    // 1: connected, 2: connecting
+    let state = mongoose.connection.readyState;
+    console.log('[READY] Initial readyState:', state, '(0=disconnected, 1=connected, 2=connecting, 3=disconnecting)');
+    
+    // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+    // In serverless, connection might not be established yet, so try to connect
+    if (state !== 1) {
+      // Try to connect if not already connected
+      if (state === 0) {
+        if (!process.env.MONGODB_URI) {
+          console.error('[READY] ❌ MONGODB_URI is not set in environment variables!');
+          return res.status(503).json({ 
+            status: 'degraded', 
+            db: 'not_connected',
+            error: 'MONGODB_URI environment variable is not set',
+            mongoUriSet: false
+          });
+        }
+        
+        console.log('[READY] 🔄 Attempting to connect to MongoDB...');
+        try {
+          const { connectDB } = await import('./config/db');
+          await connectDB();
+          state = mongoose.connection.readyState;
+          console.log('[READY] Connection attempt completed. New readyState:', state);
+        } catch (connectError: any) {
+          console.error('[READY] ❌ Connection attempt failed:', connectError?.message);
+          console.error('[READY] Error code:', connectError?.code);
+          console.error('[READY] Error name:', connectError?.name);
+          return res.status(503).json({ 
+            status: 'degraded', 
+            db: 'not_connected',
+            error: connectError?.message || 'Connection failed',
+            errorCode: connectError?.code,
+            mongoUriSet: !!process.env.MONGODB_URI
+          });
+        }
+      } else if (state === 2) {
+        console.log('[READY] ⏳ Connection in progress, waiting...');
+        // Wait for connection to complete
+        let attempts = 0;
+        while (state === 2 && attempts < 50) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          state = mongoose.connection.readyState;
+          attempts++;
+        }
+        console.log('[READY] After waiting, readyState:', state);
+      }
+    }
+    
     if (state === 1) {
+      console.log('[READY] ✅ Database is connected');
       res.json({ status: 'ok', db: 'connected' });
     } else {
-      res.status(503).json({ status: 'degraded', db: 'not_connected' });
+      console.error('[READY] ❌ Database is not connected. ReadyState:', state);
+      res.status(503).json({ 
+        status: 'degraded', 
+        db: 'not_connected',
+        readyState: state,
+        mongoUriSet: !!process.env.MONGODB_URI
+      });
     }
-  } catch (e) {
-    res.status(503).json({ status: 'degraded', error: 'readiness_failed' });
+  } catch (e: any) {
+    console.error('[READY] ❌ Unexpected error:', e?.message);
+    console.error('[READY] Error stack:', e?.stack);
+    res.status(503).json({ 
+      status: 'degraded', 
+      error: 'readiness_failed',
+      message: e?.message,
+      mongoUriSet: !!process.env.MONGODB_URI
+    });
   }
 });
 
