@@ -41,9 +41,8 @@ export class PayPalProvider implements PaymentProvider {
       !clientSecret.includes('your_')
     );
 
-    if (!this.isConfigured) {
-      console.warn('[PAYPAL PROVIDER] Using dummy/placeholder credentials. PayPal payment features will not work.');
-    }
+    // Silently handle dummy credentials - no warning needed
+    // PayPal features will fail gracefully when used with dummy credentials
   }
 
   /**
