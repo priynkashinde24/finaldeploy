@@ -25,12 +25,33 @@ import paypal from '@paypal/checkout-server-sdk';
  */
 
 export class PayPalProvider implements PaymentProvider {
+  private isConfigured: boolean;
+
   constructor() {
     const clientId = process.env.PAYPAL_CLIENT_ID;
     const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
-    if (!clientId || !clientSecret) {
-      throw new Error('PayPal credentials not configured. Set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET');
+    // Check if credentials are dummy/placeholder values
+    this.isConfigured = !!(
+      clientId && 
+      clientSecret && 
+      !clientId.includes('dummy') && 
+      !clientSecret.includes('dummy') &&
+      !clientId.includes('your_') &&
+      !clientSecret.includes('your_')
+    );
+
+    if (!this.isConfigured) {
+      console.warn('[PAYPAL PROVIDER] Using dummy/placeholder credentials. PayPal payment features will not work.');
+    }
+  }
+
+  /**
+   * Check if PayPal is properly configured
+   */
+  private ensureConfigured(): void {
+    if (!this.isConfigured) {
+      throw new Error('PayPal is not configured. Please set valid PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in your environment variables.');
     }
   }
 
@@ -38,6 +59,7 @@ export class PayPalProvider implements PaymentProvider {
    * Create a subscription payment session (PayPal subscriptions)
    */
   async createSubscription(params: CreateSubscriptionParams): Promise<PaymentSession> {
+    this.ensureConfigured();
     // PayPal subscriptions require a different flow (Billing Plans)
     // For now, throw error - can be implemented later
     throw new Error('PayPal subscriptions not yet implemented. Use createOneTimePayment or createOrderPayment.');
@@ -47,6 +69,7 @@ export class PayPalProvider implements PaymentProvider {
    * Create a one-time payment session
    */
   async createOneTimePayment(params: CreateOneTimePaymentParams): Promise<PaymentSession> {
+    this.ensureConfigured();
     try {
       const { amount, currency, customerEmail, customerName, description, metadata } = params;
 
@@ -101,6 +124,7 @@ export class PayPalProvider implements PaymentProvider {
    * Create an order payment (for order checkout)
    */
   async createOrderPayment(params: CreateOrderPaymentParams): Promise<OrderPaymentSession> {
+    this.ensureConfigured();
     try {
       const { orderId, amount, currency, customerEmail, customerName, storeName, metadata } = params;
 
@@ -157,6 +181,7 @@ export class PayPalProvider implements PaymentProvider {
    * Verify payment (for webhook events)
    */
   async verifyPayment(params: VerifyPaymentParams): Promise<boolean> {
+    this.ensureConfigured();
     try {
       const { event } = params;
 
@@ -177,6 +202,7 @@ export class PayPalProvider implements PaymentProvider {
    * Handle PayPal webhook
    */
   async handleWebhook(event: any): Promise<WebhookResult> {
+    this.ensureConfigured();
     try {
       const eventType = event.event_type;
 
@@ -262,6 +288,7 @@ export class PayPalProvider implements PaymentProvider {
    * Create a refund
    */
   async createRefund(params: CreateRefundParams): Promise<RefundResult> {
+    this.ensureConfigured();
     try {
       const { paymentId, amount, reason, metadata } = params;
 
