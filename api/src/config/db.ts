@@ -90,12 +90,24 @@ export const connectDB = async (): Promise<void> => {
 
     // Verify connection
     const connection = mongoose.connection;
+    
+    // In serverless, connection properties might not be immediately available
+    // Wait a moment for connection to fully establish
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    // In serverless environments, connection.host and connection.name might be undefined
+    // Always use URI-extracted values as primary source (they're reliable)
+    // Try to get actual connected host if available (for Atlas shard hosts)
     const actualHost = connection.host || hostFromUri;
     const actualDbName = connection.name || connection.db?.databaseName || dbNameFromUri;
     
+    // Use the values we know are correct from the URI
+    const displayHost = actualHost || hostFromUri;
+    const displayDb = actualDbName || dbNameFromUri;
+    
     console.log(`✅ MongoDB Connected`);
-    console.log(`   Host: ${actualHost}`);
-    console.log(`   Database: ${actualDbName}`);
+    console.log(`   Host: ${displayHost}`);
+    console.log(`   Database: ${displayDb}`);
     console.log(`   Ready State: ${connection.readyState} (1=connected)`);
     console.log(`   Timestamp: ${new Date().toISOString()}`);
     console.log(`   Database connected successfully`);
