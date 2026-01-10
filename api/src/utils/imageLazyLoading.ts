@@ -1,4 +1,4 @@
-/// <reference lib="dom" />
+ <reference lib="dom" />
 
 /**
  * Image Lazy Loading Utilities
