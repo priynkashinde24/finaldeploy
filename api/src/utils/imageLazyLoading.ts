@@ -1,5 +1,3 @@
- <reference lib="dom" />
-
 /**
  * Image Lazy Loading Utilities
  * 
