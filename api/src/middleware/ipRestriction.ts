@@ -34,10 +34,9 @@ function isDbConnected(): boolean {
  * Fetch IP restriction rules with timeout and error handling
  */
 async function fetchIPRules(storeId: string | null, userId: string | null, role: string | null): Promise<any[]> {
-  // Check if DB is connected
+  // Check if DB is connected - silently skip if not (normal during startup)
   if (!isDbConnected()) {
-    console.warn('[IP RESTRICTION] Database not connected, skipping IP restriction check');
-    return [];
+    return []; // Fail-open: allow requests when DB is not connected
   }
 
   try {
