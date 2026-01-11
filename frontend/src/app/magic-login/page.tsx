@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { motion } from 'framer-motion';
 
+// Force dynamic rendering to prevent static generation issues with useSearchParams
+export const dynamic = 'force-dynamic';
+
 function MagicLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -38,38 +41,38 @@ function MagicLoginContent() {
           setUserRole(role);
           console.log('[MAGIC LOGIN PAGE] Magic login successful:', { role });
 
-          // Redirect based on role - use hard redirect for admins and affiliates
-          let redirectPath = '/';
+          // Redirect based on role - use hard redirect for admins, suppliers, affiliates, and resellers
           if (role === 'admin') {
-            redirectPath = '/admin';
-            // Use window.location for immediate hard redirect
+            console.log('[MAGIC LOGIN PAGE] ✅✅✅ ADMIN DETECTED - Redirecting to /admin ✅✅✅');
             if (typeof window !== 'undefined') {
-              console.log('[MAGIC LOGIN PAGE] Using window.location.href for hard redirect to /admin');
               window.location.href = '/admin';
               return; // Exit early since we're doing hard redirect
             }
           } else if (role === 'supplier') {
-            redirectPath = '/supplier';
+            console.log('[MAGIC LOGIN PAGE] ✅✅✅ SUPPLIER DETECTED - Redirecting to /supplier ✅✅✅');
+            if (typeof window !== 'undefined') {
+              window.location.href = '/supplier';
+              return; // Exit early since we're doing hard redirect
+            }
           } else if (role === 'affiliate') {
-            // For affiliates, redirect to affiliate dashboard - use hard redirect
-            redirectPath = '/affiliate';
-            // Use window.location for immediate hard redirect
+            console.log('[MAGIC LOGIN PAGE] ✅✅✅ AFFILIATE DETECTED - Redirecting to /affiliate ✅✅✅');
             if (typeof window !== 'undefined') {
               window.location.href = '/affiliate';
               return; // Exit early since we're doing hard redirect
             }
           } else if (role === 'reseller') {
-            // For resellers, redirect to reseller dashboard
-            redirectPath = '/reseller';
+            console.log('[MAGIC LOGIN PAGE] ⚠️⚠️⚠️ RESELLER DETECTED - Redirecting to /reseller ⚠️⚠️⚠️');
+            if (typeof window !== 'undefined') {
+              window.location.href = '/reseller';
+              return; // Exit early since we're doing hard redirect
+            }
           } else {
             // For customer/delivery, redirect to dashboard which will determine the correct page
-            redirectPath = '/dashboard';
+            console.log('[MAGIC LOGIN PAGE] Unknown role:', role, '- Redirecting to /dashboard');
+            setTimeout(() => {
+              router.push('/dashboard');
+            }, 2000);
           }
-
-          // Redirect after 2 seconds
-          setTimeout(() => {
-            router.push(redirectPath);
-          }, 2000);
         } else {
           setError(response.message || 'Invalid or expired magic link');
         }
@@ -122,11 +125,15 @@ function MagicLoginContent() {
               variant="primary" 
               onClick={() => {
                 if (userRole === 'admin') {
-                  router.push('/admin');
+                  window.location.href = '/admin';
                 } else if (userRole === 'supplier') {
-                  router.push('/supplier');
+                  window.location.href = '/supplier';
+                } else if (userRole === 'affiliate') {
+                  window.location.href = '/affiliate';
+                } else if (userRole === 'reseller') {
+                  window.location.href = '/reseller';
                 } else {
-                  // For reseller/customer/delivery, redirect to dashboard which will determine the correct page
+                  // For customer/delivery, redirect to dashboard which will determine the correct page
                   router.push('/dashboard');
                 }
               }} 
