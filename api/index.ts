@@ -1,6 +1,7 @@
 // Vercel Serverless Function Entry Point
 // This file serves as the entry point for Vercel deployment
-// It re-exports the app from api/api/index.ts
+import app from './src/app';
 
-export { default } from './api/index';
+// Export the Express app as the default handler for Vercel
+export default app;
 
