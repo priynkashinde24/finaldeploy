@@ -57,7 +57,7 @@ export const StoreProvider: React.FC<StoreProviderProps> = ({ children }) => {
       setIsLoading(true);
       setError(null);
 
-      if (typeof window === 'undefined') {
+      if (typeof window === 'undefined' || typeof window.location === 'undefined') {
         setIsLoading(false);
         return;
       }
