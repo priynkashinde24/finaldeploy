@@ -29,19 +29,9 @@ export const connectDB = async (): Promise<void> => {
     let connectionString = MONGODB_URI.trim();
     
     // Check if MONGODB_URI is a placeholder
-    // Common Atlas placeholder patterns:
-    // - mongodb+srv://username:password@cluster.mongodb.net/<db>
-    // - mongodb+srv://USER:PASS@cluster.mongodb.net/<db>  (generic host is invalid: DNS ENOTFOUND)
-    const isSrv = connectionString.startsWith('mongodb+srv://');
-    const hostMatch = connectionString.match(/mongodb\+srv:\/\/[^@]+@([^\/]+)\//);
-    const hostOnly = hostMatch?.[1] || '';
-    const looksLikeGenericAtlasHost =
-      hostOnly === 'cluster.mongodb.net' ||
-      hostOnly === 'cluster0.mongodb.net' ||
-      // Real Atlas SRV hosts look like: cluster0.xxxxx.mongodb.net (note the extra segment)
-      (isSrv && hostOnly.endsWith('.mongodb.net') && !hostOnly.match(/^[a-z0-9-]+\.[a-z0-9-]+\.mongodb\.net$/i));
-
-    if (connectionString.includes('username:password') || looksLikeGenericAtlasHost) {
+    if (connectionString.includes('username:password') || 
+        (connectionString.includes('cluster.mongodb.net') && 
+         !connectionString.match(/@[a-z0-9]+\.mongodb\.net/))) {
       const error = new Error('MONGODB_URI appears to be a placeholder!');
       console.error('❌ MONGODB_URI appears to be a placeholder!');
       console.error('📝 Please replace it with your actual MongoDB Atlas connection string');
@@ -76,40 +66,38 @@ export const connectDB = async (): Promise<void> => {
     console.log('   URI:', connectionString.replace(/:[^:@]+@/, ':****@'));
     console.log('   Host:', hostFromUri);
     console.log('   Database:', dbNameFromUri);
-    console.log('   Timestamp:', new Date().toISOString());
     
+    // Optimized settings for Vercel serverless functions
     await mongoose.connect(connectionString, {
-      serverSelectionTimeoutMS: 10000, // 10 seconds timeout (matches error message)
+      serverSelectionTimeoutMS: 10000, // 10 seconds timeout
       socketTimeoutMS: 45000, // 45 seconds socket timeout
       connectTimeoutMS: 10000, // 10 seconds connection timeout
       retryWrites: true,
       w: 'majority',
-      maxPoolSize: 10, // Maintain up to 10 socket connections
-      minPoolSize: 1, // Maintain at least 1 socket connection
+      // For serverless, use smaller pool to avoid connection limits
+      maxPoolSize: process.env.VERCEL ? 1 : 10,
+      minPoolSize: 0, // Don't maintain persistent connections in serverless
+      // Keep connection alive for reuse across invocations
+      keepAlive: true,
+      keepAliveInitialDelay: 30000,
     });
 
-    // Verify connection
+    // Verify connection - wait a moment for serverless to establish
     const connection = mongoose.connection;
-    
-    // In serverless, connection properties might not be immediately available
-    // Wait a moment for connection to fully establish
     await new Promise(resolve => setTimeout(resolve, 100));
     
-    // In serverless environments, connection.host and connection.name might be undefined
-    // Always use URI-extracted values as primary source (they're reliable)
-    // Try to get actual connected host if available (for Atlas shard hosts)
     const actualHost = connection.host || hostFromUri;
     const actualDbName = connection.name || connection.db?.databaseName || dbNameFromUri;
     
-    // Use the values we know are correct from the URI
-    const displayHost = actualHost || hostFromUri;
-    const displayDb = actualDbName || dbNameFromUri;
+    // Verify connection is actually ready
+    if (connection.readyState !== 1) {
+      throw new Error(`Connection established but readyState is ${connection.readyState} (expected 1)`);
+    }
     
     console.log(`✅ MongoDB Connected`);
-    console.log(`   Host: ${displayHost}`);
-    console.log(`   Database: ${displayDb}`);
+    console.log(`   Host: ${actualHost}`);
+    console.log(`   Database: ${actualDbName}`);
     console.log(`   Ready State: ${connection.readyState} (1=connected)`);
-    console.log(`   Timestamp: ${new Date().toISOString()}`);
     console.log(`   Database connected successfully`);
   } catch (error: any) {
     console.error('\n❌ Error connecting to MongoDB:');
