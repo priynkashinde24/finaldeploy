@@ -289,9 +289,47 @@ app.get('/ready', async (req, res) => {
       }
     }
     
+    // Verify connection is actually working by pinging the database
     if (state === 1) {
-      console.log('[READY] ✅ Database is connected');
-      res.json({ status: 'ok', db: 'connected' });
+      try {
+        // Ping the database to verify it's actually working
+        await mongoose.connection.db?.admin().ping();
+        console.log('[READY] ✅ Database is connected and responding');
+        res.json({ 
+          status: 'ok', 
+          db: 'connected',
+          host: mongoose.connection.host || 'unknown',
+          database: mongoose.connection.name || mongoose.connection.db?.databaseName || 'unknown',
+          readyState: state
+        });
+      } catch (pingError: any) {
+        console.error('[READY] ❌ Database ping failed:', pingError?.message);
+        // Connection state says connected but ping failed - try reconnecting
+        console.log('[READY] 🔄 Attempting to reconnect...');
+        try {
+          const { connectDB } = await import('./config/db');
+          await connectDB();
+          // Try ping again
+          await mongoose.connection.db?.admin().ping();
+          console.log('[READY] ✅ Database reconnected and responding');
+          res.json({ 
+            status: 'ok', 
+            db: 'connected',
+            host: mongoose.connection.host || 'unknown',
+            database: mongoose.connection.name || mongoose.connection.db?.databaseName || 'unknown',
+            readyState: mongoose.connection.readyState
+          });
+        } catch (reconnectError: any) {
+          console.error('[READY] ❌ Reconnection failed:', reconnectError?.message);
+          res.status(503).json({ 
+            status: 'degraded', 
+            db: 'not_connected',
+            error: 'Database ping failed',
+            readyState: mongoose.connection.readyState,
+            mongoUriSet: !!process.env.MONGODB_URI
+          });
+        }
+      }
     } else {
       console.error('[READY] ❌ Database is not connected. ReadyState:', state);
       res.status(503).json({ 
