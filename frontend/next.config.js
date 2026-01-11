@@ -32,6 +32,11 @@ const nextConfig = {
 
     return [{ source: '/api/:path*', destination: `${target}/:path*` }];
   },
+  // Experimental features to help with SSR issues
+  experimental: {
+    // Disable static optimization for pages that use useSearchParams
+    missingSuspenseWithCSRBailout: false,
+  },
 };
 
 module.exports = nextConfig;
