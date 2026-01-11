@@ -8,6 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic';
+
 type DocumentCategory = 'kyc' | 'invoice' | 'contract' | 'license' | 'certificate' | 'statement' | 'agreement' | 'other';
 
 const CATEGORY_LABELS: Record<DocumentCategory, string> = {
